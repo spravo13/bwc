@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+version="v0.1"
+
+crawlhelp(){
+    echo "\
+Bash Crawler $version -GPL v3\
+"
+}
+
+if [[ $1 == "" ]]; then
+    crawlhelp
+
+
+
+fi
