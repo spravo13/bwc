@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 version="v0.1"
 
-crawlhelp(){
+gwchelp(){
     echo "\
-Bash Crawler $version -GPL v3\
+GWC $version -GPL v3\
 "
 }
 
 if [[ $1 == "" ]]; then
-    crawlhelp
-
+    gwchelp
+elif [[ $1 == -h ]]; then
+    gwchelp
 
 
 fi

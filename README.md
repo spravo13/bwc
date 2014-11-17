@@ -1,4 +1,4 @@
-bwc(bash web crawler)
+GWC(GNU Web Crawler)
 ============
 
 A web crawler written in bash
