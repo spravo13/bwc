@@ -3,14 +3,34 @@ version="v0.1"
 
 gwchelp(){
     echo "\
-GWC $version -GPL v3\
+GWC $version -GPL v3
+Usage: gwc [-h] [-o] [-c]\
 "
 }
+gwcoptions(){
+echo "\
+-h > show help/info
+-o > show options
+-c > crawl starting with a specific website"
+}
+crawler(){
+read -p "Type the name of the site you would like to start on, please disclude http:// or https:// (i.e. www.spencerbravo.com):
+\
+" startsite
+if [ ! -d "$HOME/crawl-$startsite" ]; then
+    mkdir "$HOME/crawl-$startsite";
+fi
+}
+
+
+
 
 if [[ $1 == "" ]]; then
     gwchelp
 elif [[ $1 == -h ]]; then
     gwchelp
-
-
+elif [[ $1 == -o ]]; then
+    gwcoptions
+elif [[ $1 == -c ]]; then
+    crawler
 fi
