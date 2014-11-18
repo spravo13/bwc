@@ -3,6 +3,12 @@ GWC(GNU Web Crawler)
 
 A web crawler written in bash
 
+| Option | Description                 |
+| ------ | --------------------------- |
+| -h     | Show help/info              |
+| -o     | Lists options               |
+| -c     | Start a new crawl               |
+
 ## Contributing
 
 I am open to pull requests just as long as you know <a href="http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html" target= "_blank">how to to write a commit message</a>.
