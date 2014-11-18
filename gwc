@@ -1,36 +1,58 @@
 #!/usr/bin/env bash
-version="v0.1"
+version="v0.1";
 
 gwchelp(){
     echo "\
 GWC $version -GPL v3
 Usage: gwc [-h] [-o] [-c]\
-"
+";
 }
+
 gwcoptions(){
 echo "\
 -h > show help/info
 -o > show options
--c > crawl starting with a specific website"
+-c > crawl starting with a specific website";
 }
-crawler(){
+
+dirsetup(){
 read -p "Type the name of the site you would like to start on, please disclude http:// or https:// (i.e. www.spencerbravo.com):
 \
 " startsite
-if [ ! -d "$HOME/crawl-$startsite" ]; then
-    mkdir "$HOME/crawl-$startsite";
+if [[ ! -d "$HOME/crawl/" ]]; then
+    mkdir "$HOME/crawl/";
+fi
+if [[ ! -d "$HOME/crawl/$startsite" ]]; then
+    mkdir "$HOME/crawl/$startsite";
+else
+    declare -i count=1;
+    arg="f";
+    while [[ $arg == "f" ]]; do
+        if [[ ! -d "$HOME/crawl/$startsite($count)" ]]; then
+            mkdir "$HOME/crawl/$startsite($count)";
+            arg="t";
+        else
+            count=$count+1;
+            arg="f";
+        fi
+    done
 fi
 }
+crawler(){
+    dirsetup;
+}
+
+
 
 
 
 
 if [[ $1 == "" ]]; then
-    gwchelp
+    gwchelp;
 elif [[ $1 == -h ]]; then
-    gwchelp
+    gwchelp;
 elif [[ $1 == -o ]]; then
-    gwcoptions
+    gwcoptions;
 elif [[ $1 == -c ]]; then
-    crawler
+    crawler;
 fi
