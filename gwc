@@ -24,6 +24,7 @@ if [[ ! -d "$HOME/crawl/" ]]; then
 fi
 if [[ ! -d "$HOME/crawl/$startsite" ]]; then
     mkdir "$HOME/crawl/$startsite";
+dir="$HOME/crawl/$startsite";
 else
     declare -i count=1;
     arg="f";
@@ -35,14 +36,14 @@ else
             count=$count+1;
             arg="f";
         fi
+        dir="$HOME/crawl/$startsite($count)";
     done
 fi
 }
 crawler(){
     dirsetup;
+    wget $startsite --quiet --output-document=$dir/index;
 }
-
-
 
 
 
