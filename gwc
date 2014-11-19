@@ -43,6 +43,11 @@ fi
 crawler(){
     dirsetup;
     wget $startsite --quiet --output-document=$dir/index;
+        
+#figure out how to take just url out of file (v dev v)
+#echo '<a href="codeshrub.com">'  | sed 's/\("\).*/\1/g'
+
+
 }
 
 
