@@ -3,13 +3,11 @@ VISITED_URLS_FILE="$HOME/crawler_visited_urls"
      
 EXPR_URL_MATCH="http://[^'\"]\+\.html"
      
-EXPRESSION="[A-Za-z0-9._%\\+-]\\+@[A-Za-z0-9.-]\\+\\.[A-Za-z]\\{2,6\\}"
-     
-RUNTIME=30
-     
 WGET_TIMEOUT=10
 WGET_RETRIES=0
      
+RUNTIME=30
+
 START_TIME=`date +%s`
      
 if [[ "$CRAWLER_RECURSION" == "" ]]; then
@@ -21,80 +19,55 @@ else
     let CRAWLER_RECURSION++
 fi
      
-     
 while getopts e:t:s OPTION; do
-case "$OPTION" in
-    *)
-        echo "nothing"
-        SUMMARY=1
-    ;;
+    case "$OPTION" in
+        *)
+            SUMMARY=1
+        ;;
     esac
-    done
+done
  
-    if [[ $RUNTIME -le 0 ]]; then
-            exit 0
+while shift; do
+    if [[ "$1" == *://* ]]; then
+        URL=$1
+        break
     fi
+done
      
-    while shift; do
-            if [[ "$1" == *://* ]]; then
-                    URL=$1
-                    break
-            fi
-    done
+if [[ "$DEBUG" != "" ]]; then
+    echo ">> $URL / T=$RUNTIME / CRAWLER_RECURSION=$CRAWLER_RECURSION"
+fi
      
-    if [[ "$DEBUG" != "" ]]; then
-            echo ">> $URL / T=$RUNTIME / CRAWLER_RECURSION=$CRAWLER_RECURSION"
-    fi
+if [ "$URL" == "" ]; then
+    echo "Syntax: $0 [-e expression] [-t runtime] [-s] URL"
+    exit 1
+fi
      
-    if [ "$URL" == "" ]; then
-            echo "Syntax: $0 [-e expression] [-t runtime] [-s] URL"
-            exit 1
-    fi
+TMP_PAGE=`mktemp`
+wget $URL -t $WGET_RETRIES -T $WGET_TIMEOUT -qO $TMP_PAGE
+echo $URL >> $VISITED_URLS_FILE
      
-    TMP_PAGE=`mktemp`
-    wget $URL -t $WGET_RETRIES -T $WGET_TIMEOUT -qO $TMP_PAGE
-    echo $URL >> $VISITED_URLS_FILE
-     
-    if [ $? != 0 ]; then
-            rm $TMP_PAGE
-            exit $?
-    fi
-     
-    RESULTS=`grep -no $EXPRESSION $TMP_PAGE`
-     
-    for result in $RESULTS; do
-            echo "$URL $result"
-     
-            read LINE DATA <<< `echo $result |tr ":" " "`
-    done
-     
-    URL_LIST=`grep -o $EXPR_URL_MATCH $TMP_PAGE`
-     
+if [ $? != 0 ]; then
     rm $TMP_PAGE
+    exit $?
+fi
      
-    for u in $URL_LIST; do
-            CURRENT_TIME=`date +%s`
+echo $URL 
      
-            if [[ $(($START_TIME + $RUNTIME)) -le $CURRENT_TIME ]]; then
-                    break
-            fi
+URL_LIST=`grep -o $EXPR_URL_MATCH $TMP_PAGE`
      
-            if [[ ! `grep -o $u $VISITED_URLS_FILE` ]]; then
-                    $0 -t $(($RUNTIME - ($CURRENT_TIME - $START_TIME))) -e $EXPRESSION $u
-            fi
-    done
+rm $TMP_PAGE
      
-     
-    if [[ "$SUMMARY" != "" ]]; then
-            URLS_VISITED=`wc -l $VISITED_URLS_FILE |cut -d " " -f 1`
-            ELAPSED_TIME=$((`date +%s` - $START_TIME))
+for u in $URL_LIST; do
+    CURRENT_TIME=`date +%s`
+    if [[ ! `grep -o $u $VISITED_URLS_FILE` ]]; then
+        $0 -t $(($RUNTIME - ($CURRENT_TIME - $START_TIME))) -e $EXPRESSION $u
     fi
+done
      
+if [[ "$CRAWLER_RECURSION" == "1" ]]; then
+    unset CRAWLER_RECURSION
+fi
      
-    if [[ "$CRAWLER_RECURSION" == "1" ]]; then
-            #rm $VISITED_URLS_FILE
-            unset CRAWLER_RECURSION
-    fi
-     
-    let CRAWLER_RECURSION--
+let CRAWLER_RECURSION--
 
