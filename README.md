@@ -1,7 +1,7 @@
 GWC(GNU Web Crawler)
 ============
 
-A web crawler written in bash
+A web crawler written in bash. Still in development, most files are unstable(run at your own risk).
 
 | Option | Description                 |
 | ------ | --------------------------- |
