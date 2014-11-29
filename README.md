@@ -1,4 +1,4 @@
-GWC(GNU Web Crawler)
+BWC(Bash Web Crawler)
 ============
 
 A web crawler written in bash. Still in development, most files are unstable(run at your own risk). The dec-crawl is a completely seperate file in which these commands have nothing to do with.

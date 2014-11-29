@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 version="v0.1";
 
-gwchelp(){
+bwchelp(){
     echo "\
-GWC $version -GPL v3
-Usage: gwc [-h] [-o] [-c]\
+BWC $version -GPL v3
+Usage: bwc [-h] [-o] [-c]\
 ";
 }
 
-gwcoptions(){
+bwcoptions(){
 echo "\
 -h > show help/info
 -o > show options
@@ -54,11 +54,11 @@ crawler(){
 
 
 if [[ $1 == "" ]]; then
-    gwchelp;
+    bwchelp;
 elif [[ $1 == -h ]]; then
-    gwchelp;
+    bwchelp;
 elif [[ $1 == -o ]]; then
-    gwcoptions;
+    bwcoptions;
 elif [[ $1 == -c ]]; then
     crawler;
 fi
